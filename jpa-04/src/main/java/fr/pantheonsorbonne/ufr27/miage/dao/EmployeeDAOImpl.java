@@ -1,16 +1,13 @@
 package fr.pantheonsorbonne.ufr27.miage.dao;
 
 import fr.pantheonsorbonne.ufr27.miage.domain.Department;
-import fr.pantheonsorbonne.ufr27.miage.domain.Department_;
 import fr.pantheonsorbonne.ufr27.miage.domain.Employee;
-import fr.pantheonsorbonne.ufr27.miage.domain.Employee_;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -43,15 +40,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     @Transactional
     public List<Employee> listEmployees() {
-        // get the main criteria building block
-        CriteriaBuilder builder = manager.getCriteriaBuilder();
-
-
-        // create the query with the expected return type
-        CriteriaQuery<Employee> query = builder.createQuery(Employee.class);
-        Root<Employee> root = query.from(Employee.class);
-
-        return manager.createQuery(query).getResultList();
+        return null;
 
     }
 
