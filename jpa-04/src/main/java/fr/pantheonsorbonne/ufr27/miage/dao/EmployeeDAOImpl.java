@@ -23,45 +23,21 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     @Transactional
     public void createBaseEmployees() {
-        // get the main criteria building block
-        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        int numOfEmployees = manager.createQuery("Select a From Employee a", Employee.class).getResultList().size();
+        if (numOfEmployees == 0) {
 
-        // create the query with the expected return type
-        CriteriaQuery<Employee> query = builder.createQuery(Employee.class);
-        // table from which to return data
-        Root<Employee> root = query.from(Employee.class);
+            Department javadep = new Department("java");
+            manager.persist(javadep);
+            manager.persist(new Employee("Java Guy 1", javadep,100));
+            manager.persist(new Employee("Java Guy 2", javadep,120));
 
-        // joint with DepartmentTable
-        Join<Employee, Department> join = root.join(Employee_.department);
-
-        // different predicates for different requests
-        Predicate predicateJava = builder.equal(join.get(Department_.NAME), "java");
-        Predicate predicatePhp = builder.equal(join.get(Department_.NAME), "php");
-
-        TypedQuery<Employee> getEmployeesByDepNameJava = manager.createQuery(query.where(predicateJava));
-        List<Employee> javaEmployees = getEmployeesByDepNameJava.getResultList();
-        int numOfEmployeesJava = javaEmployees.size();
-        if (numOfEmployeesJava == 0) {
-            Department department = new Department("java");
-            manager.persist(department);
-
-            manager.persist(new Employee("Jakab Gipsz", department, 100));
-            manager.persist(new Employee("Captain Nemo", department, 120));
-        }
-
-        TypedQuery<Employee> getEmployeesByDepNamePhp = manager.createQuery(query.where(predicatePhp));
-
-        List<Employee> phpEmployees = getEmployeesByDepNamePhp.getResultList();
-        int numOfEmployeesPhp = phpEmployees.size();
-        if (numOfEmployeesPhp == 0) {
-
-            Department departmentPhp = new Department("php");
-            manager.persist(departmentPhp);
-
-            manager.persist(new Employee("Goofie", departmentPhp, 80));
-            manager.persist(new Employee("Dummy", departmentPhp, 70));
+            Department phpdep = new Department("php");
+            manager.persist(phpdep);
+            manager.persist(new Employee("Php Guy 1", phpdep,70));
+            manager.persist(new Employee("Php Guy 2", phpdep,80));
 
         }
+
     }
 
     @Override
